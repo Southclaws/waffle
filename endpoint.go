@@ -15,8 +15,8 @@ func (f Endpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if status.Err != nil {
 		status.ErrString = status.Err.Error()
 	}
-	w.WriteHeader(status.code)
 	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(status.code)
 	err := json.NewEncoder(w).Encode(status)
 	if err != nil {
 		http.Error(w, "failed to encode response", 500)
