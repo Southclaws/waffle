@@ -25,7 +25,7 @@ This is an automatically generated documentation page for the %s API endpoints.
 
 const documentationRouteTemplate = `## {{ .Name }}
 
-` + "`" + `{{ .Method }}` + "`" + `: ` + "`" + `/{{ .Version }}{{ .Path }}` + "`" + `
+` + "`" + `{{ .Method }}` + "`" + `: ` + "`" + `/{{ .Name }}{{ .Path }}` + "`" + `
 
 {{ .Description }}
 {{ if .Params }}
