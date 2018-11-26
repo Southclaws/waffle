@@ -12,6 +12,7 @@ import (
 
 type routeForTemplate struct {
 	Route
+	Group             string
 	ParamsSerialised  string
 	AcceptsSerialised string
 	ReturnsSerialised string
@@ -25,7 +26,7 @@ This is an automatically generated documentation page for the %s API endpoints.
 
 const documentationRouteTemplate = `## {{ .Name }}
 
-` + "`" + `{{ .Method }}` + "`" + `: ` + "`" + `/{{ .Name }}{{ .Path }}` + "`" + `
+` + "`" + `{{ .Method }}` + "`" + `: ` + "`" + `/{{ .Group }}{{ .Path }}` + "`" + `
 
 {{ .Description }}
 {{ if .Params }}
@@ -51,18 +52,19 @@ func docsWrapper(handler RouteHandler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(fmt.Sprintf(documentationHeader, handler.Name(), handler.Name())))
 		for _, route := range handler.Routes() {
-			docsForRoute(route, w)
+			docsForRoute(handler.Name(), route, w)
 		}
 		w.Header().Set("Content-Type", "text/markdown")
 		return
 	}
 }
 
-func docsForRoute(route Route, w io.Writer) {
+func docsForRoute(group string, route Route, w io.Writer) {
 	var err error
 
 	obj := routeForTemplate{
 		Route: route,
+		Group: group,
 	}
 
 	if route.Params != nil {
