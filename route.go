@@ -29,18 +29,20 @@ type Route struct {
 type Handlers map[string]RouteHandler
 
 // Router constructs a Gorilla mux router from the handlers
-func (h Handlers) Router() (router *mux.Router) {
+func (h Handlers) Router(prefix string) (router *mux.Router) {
 	router = mux.NewRouter().StrictSlash(true)
 
 	for name, handler := range h {
 		for _, route := range handler.Routes() {
 			router.Methods(route.Method).
+				PathPrefix(prefix).
 				Path(path.Join("/", name, route.Path)).
 				Name(route.Name).
 				Handler(route.Handler)
 		}
 
 		router.Methods("GET").
+			PathPrefix(prefix).
 			Path(path.Join("/", name, "docs")).
 			Name("docs").
 			Handler(docsWrapper(handler))
