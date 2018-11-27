@@ -50,7 +50,7 @@ Example: ` + "`" + `{{ .ParamsSerialised }}` + "`" + `
 
 func docsWrapper(handler RouteHandler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "text/markdown")
+		w.Header().Set("Content-Type", "text/plain")
 		_, err := w.Write([]byte(fmt.Sprintf(documentationHeader, handler.Name(), handler.Name())))
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
